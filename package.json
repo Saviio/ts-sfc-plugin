@@ -20,7 +20,8 @@
   ],
   "files": [
     "index.d.ts",
-    "lib/"
+    "lib/",
+    "index.js"
   ],
   "author": "Saviio",
   "license": "MIT",

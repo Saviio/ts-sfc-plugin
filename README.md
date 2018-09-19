@@ -1,3 +1,8 @@
+[![npm](https://img.shields.io/npm/v/ts-sfc-plugin.svg?style=for-the-badge)](https://www.npmjs.com/package/ts-sfc-plugin)
+[![Coveralls github branch](https://img.shields.io/coveralls/github/Saviio/ts-sfc-plugin/master.svg?style=for-the-badge)](https://coveralls.io/github/Saviio/ts-sfc-plugin?branch=master)
+[![CircleCI branch](https://img.shields.io/circleci/project/github/Saviio/ts-sfc-plugin/master.svg?style=for-the-badge)](https://circleci.com/gh/Saviio/ts-sfc-plugin/tree/master)
+[![GitHub license](https://img.shields.io/github/license/Saviio/ts-sfc-plugin.svg?style=for-the-badge)](https://github.com/Saviio/ts-sfc-plugin/blob/master/LICENSE)
+
 # ts-sfc-plugin
 
 A plugin for optimizing stateless component of React (tsx)

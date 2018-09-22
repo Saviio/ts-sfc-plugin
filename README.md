@@ -12,7 +12,7 @@ A plugin for optimizing stateless component of React (tsx)
 React functional component(SFC) is easy to use and help to reduce code size significantly, but sometimes
 people might have been some misunderstanding about its perfomance. Usually, we think functional components would avoid some overheads like mounting / unmounting / lifecycle checking and memory allocations, but in fact, there're no special optimizations currently (but after react 16 was released, sfc is indeed faster than before).
 
-Fortunately SFC just function in react world, if we do care about performance in production there're still a way to improve and this plugin here come to optimize these situation.
+Fortunately SFC just function in react world, if we do care about performance in production there're still a way to improve and this plugin here come to simplify these situation.
 
 ```javascript
 const code1 = (
@@ -88,9 +88,63 @@ export class App extends React.PureComponent {
 }
 ```
 
+### option
+sfcPlugin(option?: Option)
+
+interface Option {
+  pragma?: string
+  mode?: 1 | 2
+}
+
+## Deopt
+| Reason | Deopt (mode 1) | Deopt (mode 2)
+|--|--|--|
+| spread operator | true | false
+| prop: key | true | false
+
+Considering we transform the code from tsx to native function-call which means the additional vd-layer will be eliminatd, and the effects of `key` will be removed as well.
+
+```javascript
+// before
+
+const Message = () => <div>bravo</div>
+
+export class App extends React.PureComponent {
+  render() {
+    return <Message key={ 1 } />
+  }
+}
+```
+
+```javascript
+// after
+
+const Message = () => <div>bravo</div>
+
+export class App extends React.PureComponent {
+  render() {
+    // won't take benefit from prop: `key`
+    return Message(Object.assign({}, { key: 1 }))
+  }
+}
+```
+
+## Notice
+Unlike [@babel/plugin-transform-react-inline-elements](https://babeljs.io/docs/en/next/babel-plugin-transform-react-inline-elements), we won't take `ref` into account because of this plugin will be applied to typescript only.
+```javascript
+const Message = () => <div>bravo</div>
+
+export class App extends React.PureComponent {
+  render() {
+    // ERROR: this is not type-safe
+    // { ref: any } is not assignable to IntrinsicAttributes
+    return <Message ref={ ... } />
+  }
+}
+```
 
 ## Defect
-The following code is recommanded
+The following code is recommanded:
 
 ```javascript
 <Avatar sfc>
@@ -98,6 +152,7 @@ The following code is recommanded
 ```
 
 using declaration merging in global .d.ts
+
 ```javascript
 import React from 'react'
 
@@ -109,8 +164,8 @@ declare module 'react' {
   }
 }
 ```
-
-Also, code like the usage will not work as expect, because the plugin does not include any runtime type checking.
+### Exception
+code like the usage will not work, because the plugin does not include any runtime type checking.
 
 ```javascript
 const component = <Avatar sfc={ this.props.flag } />

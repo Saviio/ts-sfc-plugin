@@ -10,7 +10,14 @@ interface EditedNode extends ts.Node {
 }
 
 export interface Option {
-  pragma?: string
+  pragma?: string,
+  mode?: 1 | 2
+}
+
+enum Flag {
+  Initial = 0,
+  Opt = 2,
+  Deopt = 10
 }
 
 const createObjectAssign = (params: ReadonlyArray<ts.Expression>) => {
@@ -61,7 +68,8 @@ const transformToPropertyAssignment = (attrs: ts.JsxAttribute[]) => {
 
 export function createTransformer(option?: Option) {
   const defaultOptions = {
-    pragma: 'sfc'
+    pragma: 'sfc',
+    mode: 1
   }
 
   const transformerOptions = Object.assign({}, defaultOptions, option)
@@ -88,25 +96,31 @@ export function createTransformer(option?: Option) {
 
       const spreadAttrs: ts.Expression[] = []
       const attrs: ts.JsxAttribute[] = []
-      let isSFC = false
+      let shouldOptmize: Flag = Flag.Initial
 
       attributes.forEachChild((child: ts.Node) => {
         if (ts.isJsxSpreadAttribute(child)) {
           spreadAttrs.push(child.getChildAt(2) as ts.Expression)
+          if (transformerOptions.mode == 1) {
+            shouldOptmize |= Flag.Deopt
+          }
         } else if (ts.isJsxAttribute(child)) {
-          if (child.name.getText().trim() === transformerOptions.pragma) {
+          const attrIdentifier = child.name.getText().trim()
+          if (attrIdentifier === 'key' && transformerOptions.mode === 1) {
+            shouldOptmize |= Flag.Deopt
+          }
+
+          if (attrIdentifier === transformerOptions.pragma) {
             if (child.getChildCount() === 1) {
               // handle:
-              // e.g.
-              // 	  <Avatar sfc />
-              isSFC = true
+              // e.g. <Avatar sfc />
+              shouldOptmize |= Flag.Opt
             } else {
               // handle:
-              // e.g.
-              //    <Avatar sfc={ true } />
+              // e.g. <Avatar sfc={ true } />
               if (child.getChildCount() >= 2) {
                 if (/\{\s*true\s*\}/.test(child.getChildAt(2).getText())) {
-                  isSFC = true
+                  shouldOptmize |= Flag.Opt
                 }
               }
             }
@@ -116,7 +130,7 @@ export function createTransformer(option?: Option) {
         }
       })
 
-      if (isSFC) {
+      if ((shouldOptmize as Flag) === Flag.Opt) {
         const params: ts.Expression[] = []
         if (JsxNodeType === JsxType.Standard) {
           // ast: JsxElement -> SyntaxList

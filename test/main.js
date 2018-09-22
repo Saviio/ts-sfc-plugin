@@ -11,8 +11,8 @@ const genResult = (fileName, source) => {
   fs.writeFileSync(resolve(__dirname, 'result', fileName), source)
 }
 
-describe('should do transformation successfully', () => {
-  const transformer = transformerFactory()
+describe('[Mode 1] should do transformation successfully', () => {
+  const transformer = transformerFactory({ mode: 1 })
 
   fixtureDir.forEach((filename, i) => {
     // if (filename === 'support-transform.tsx') {
@@ -28,7 +28,37 @@ describe('should do transformation successfully', () => {
       const transformedSourceFile = result.transformed[0]
 
       const resultCode = printer.printFile(transformedSourceFile)
-      const expectCode = fs.readFileSync(resolve(__dirname, 'expect', filename), 'utf-8')
+      const expectCode = fs.readFileSync(resolve(__dirname, 'expect', 'mode1', filename), 'utf-8')
+      result.dispose()
+
+      expect(resultCode).to.equal(expectCode)
+
+      // genResult(filename, resultCode)
+
+    })
+  // }
+  })
+
+})
+
+describe('[Mode 2] should do transformation successfully', () => {
+  const transformer = transformerFactory({ mode: 2 })
+
+  fixtureDir.forEach((filename, i) => {
+    // if (filename === 'support-params-1.tsx') {
+    const testcase = filename
+      .replace('.tsx', '')
+      .replace(/\-/g, ' ')
+      .replace(/\s(\d)/, (_, c) => `: ${c.trim()}`)
+
+    it(`should ${testcase}`, () => {
+      const sourceCode = fs.readFileSync(resolve(__dirname, 'fixtures', filename), 'utf-8')
+      const source = ts.createSourceFile(filename, sourceCode, ts.ScriptTarget.ES2016, true)
+      const result = ts.transform(source, [ transformer ])
+      const transformedSourceFile = result.transformed[0]
+
+      const resultCode = printer.printFile(transformedSourceFile)
+      const expectCode = fs.readFileSync(resolve(__dirname, 'expect', 'mode2', filename), 'utf-8')
       result.dispose()
 
       expect(resultCode).to.equal(expectCode)

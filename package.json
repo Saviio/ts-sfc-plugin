@@ -1,6 +1,6 @@
 {
   "name": "ts-sfc-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A plugin for optimizing stateless component in React(tsx).",
   "main": "index.js",
   "typings": "index.d.ts",

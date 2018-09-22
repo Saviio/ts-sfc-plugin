@@ -99,33 +99,37 @@ export function createTransformer(option?: Option) {
       let shouldOptmize: Flag = Flag.Initial
 
       attributes.forEachChild((child: ts.Node) => {
-        if (ts.isJsxSpreadAttribute(child)) {
-          spreadAttrs.push(child.getChildAt(2) as ts.Expression)
+        const attrbute = child as (ts.JsxSpreadAttribute | ts.JsxAttribute)
+
+        if (ts.isJsxSpreadAttribute(attrbute)) {
+          spreadAttrs.push(attrbute.getChildAt(2) as ts.Expression)
           if (transformerOptions.mode == 1) {
             shouldOptmize |= Flag.Deopt
           }
-        } else if (ts.isJsxAttribute(child)) {
-          const attrIdentifier = child.name.getText().trim()
+        } else {
+          // branch: JsxAttribute
+          const attrIdentifier = attrbute.name.getText().trim()
           if (attrIdentifier === 'key' && transformerOptions.mode === 1) {
             shouldOptmize |= Flag.Deopt
           }
 
           if (attrIdentifier === transformerOptions.pragma) {
-            if (child.getChildCount() === 1) {
+            if (attrbute.getChildCount() === 1) {
               // handle:
               // e.g. <Avatar sfc />
               shouldOptmize |= Flag.Opt
             } else {
               // handle:
               // e.g. <Avatar sfc={ true } />
-              if (child.getChildCount() >= 2) {
-                if (/\{\s*true\s*\}/.test(child.getChildAt(2).getText())) {
-                  shouldOptmize |= Flag.Opt
-                }
+              // p.s. this branch meet attrbute.getChildCount() >= 2
+              if (/\{\s*true\s*\}/.test(attrbute.getChildAt(2).getText())) {
+                shouldOptmize |= Flag.Opt
               }
             }
           } else {
-            attrs.push(child)
+            if (!(transformerOptions.mode === 2 && attrIdentifier === 'key')) {
+              attrs.push(attrbute)
+            }
           }
         }
       })
@@ -161,6 +165,7 @@ export function createTransformer(option?: Option) {
             params.push(...spreadAttrs)
           } else if (spreadAttrs.length > 0 || attrs.length > 0) {
             const assignArgs = []
+
             if (spreadAttrs.length > 0) {
               assignArgs.push(...spreadAttrs)
             }
@@ -173,7 +178,10 @@ export function createTransformer(option?: Option) {
               )
             }
 
-            params.push(createObjectAssign(assignArgs))
+            /* istanbul ignore else */
+            if (assignArgs.length > 0) {
+              params.push(createObjectAssign(assignArgs))
+            }
           }
         }
 

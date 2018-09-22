@@ -1,9 +1,10 @@
 import React from 'react';
-const Lifted = (_: {
-    message?: string;
-}) => <div message='div div div'/>;
+const Lifted = (_: any) => <div message='div div div'/>;
 export class Test extends React.PureComponent<void, void> {
     render() {
-        return Lifted(Object.assign({}, { key: 1 }));
+        return (<div>
+        {Lifted()}
+        {Lifted(Object.assign({}, { message: 1, bool: false }))}
+      </div>);
     }
 }

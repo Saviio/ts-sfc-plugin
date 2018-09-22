@@ -89,12 +89,14 @@ export class App extends React.PureComponent {
 ```
 
 ### option
+```typescript
 sfcPlugin(option?: Option)
 
 interface Option {
   pragma?: string
   mode?: 1 | 2
 }
+```
 
 ## Deopt
 | Reason | Deopt (mode 1) | Deopt (mode 2)

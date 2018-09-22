@@ -125,7 +125,7 @@ const Message = () => <div>bravo</div>
 
 export class App extends React.PureComponent {
   render() {
-    // won't take benefit from prop: `key`
+    // won't get benefit from prop: `key`
     return Message()
   }
 }

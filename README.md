@@ -124,7 +124,7 @@ const Message = () => <div>bravo</div>
 export class App extends React.PureComponent {
   render() {
     // won't take benefit from prop: `key`
-    return Message(Object.assign({}, { key: 1 }))
+    return Message()
   }
 }
 ```

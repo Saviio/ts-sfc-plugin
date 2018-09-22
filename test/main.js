@@ -45,7 +45,7 @@ describe('[Mode 2] should do transformation successfully', () => {
   const transformer = transformerFactory({ mode: 2 })
 
   fixtureDir.forEach((filename, i) => {
-    // if (filename === 'support-params-1.tsx') {
+    // if (filename === 'should-support-key.tsx') {
     const testcase = filename
       .replace('.tsx', '')
       .replace(/\-/g, ' ')

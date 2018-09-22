@@ -5,7 +5,7 @@ export class Test extends React.PureComponent<void, void> {
     saveRef = (ref: any) => this.ref = ref;
     render() {
         return (<div>
-        {Lifted(Object.assign({}, { key: '1' }))}
+        {Lifted()}
       </div>);
     }
 }

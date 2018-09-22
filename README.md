@@ -1,4 +1,4 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/846b3e86d57c4697b681b53e78a9742b)](https://app.codacy.com/app/Saviio/ts-sfc-plugin?utm_source=github.com&utm_medium=referral&utm_content=Saviio/ts-sfc-plugin&utm_campaign=Badge_Grade_Dashboard)
+[![Codacy grade](https://img.shields.io/codacy/grade/846b3e86d57c4697b681b53e78a9742b.svg?style=for-the-badge)](https://app.codacy.com/app/Saviio/ts-sfc-plugin?utm_source=github.com&utm_medium=referral&utm_content=Saviio/ts-sfc-plugin&utm_campaign=Badge_Grade_Dashboard)
 [![npm](https://img.shields.io/npm/v/ts-sfc-plugin.svg?style=for-the-badge)](https://www.npmjs.com/package/ts-sfc-plugin)
 [![Coveralls github branch](https://img.shields.io/coveralls/github/Saviio/ts-sfc-plugin/master.svg?style=for-the-badge)](https://coveralls.io/github/Saviio/ts-sfc-plugin?branch=master)
 [![CircleCI branch](https://img.shields.io/circleci/project/github/Saviio/ts-sfc-plugin/master.svg?style=for-the-badge)](https://circleci.com/gh/Saviio/ts-sfc-plugin/tree/master)

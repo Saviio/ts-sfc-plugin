@@ -188,7 +188,7 @@ export function createTransformer(option?: Option) {
         const identifier = ts.createIdentifier(functionIdentifier)
         const callExpr = ts.createCall(identifier, [], params)
 
-        if (ts.isJsxElement(node.parent!) && !(node as EditedNode).edited) {
+        if ((ts.isJsxElement(node.parent!) || ts.isJsxFragment(node.parent!)) && !(node as EditedNode).edited) {
           return ts.visitEachChild(ts.createJsxExpression(undefined, callExpr), visitor, context)
         }
 

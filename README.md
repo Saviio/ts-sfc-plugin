@@ -9,7 +9,7 @@
 A plugin for optimizing stateless component of React (tsx)
 
 ## Important
-After react 16.8, react team announced new feature [Hooks], this plugin cannot work with it as its runtime mechanism.
+After react 16.8, react team announced new feature [Hooks], this plugin cannot work with it as its special runtime mechanism.
 
 ## Why
 React functional component(SFC) is easy to use and help to reduce code size significantly, but sometimes

@@ -8,6 +8,9 @@
 
 A plugin for optimizing stateless component of React (tsx)
 
+## Important
+After react 16.8, react team announced new feature [Hooks], this plugin cannot work with it as its runtime mechanism.
+
 ## Why
 React functional component(SFC) is easy to use and help to reduce code size significantly, but sometimes
 people might have been some misunderstanding about its perfomance. Usually, we think functional components would avoid some overheads like mounting / unmounting / lifecycle checking and memory allocations, but in fact, there're no special optimizations currently (but after react 16 was released, sfc is indeed faster than before).
